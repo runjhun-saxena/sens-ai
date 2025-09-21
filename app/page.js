@@ -23,6 +23,7 @@ import { testimonial } from "@/data/testimonials";
 import { faqs } from "@/data/faq";
 import { howItWorks } from "@/data/howItWorks";
 
+
 export default function LandingPage() {
   return (
     <>
