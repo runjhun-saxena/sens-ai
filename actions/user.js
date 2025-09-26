@@ -2,9 +2,9 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { time } from "motion";
 
-export async function updateuser(data) { // this will be our server action and this will take sime data as input
+
+export async function updateUser(data) { // this will be our server action and this will take sime data as input
 
     const { userId } = await auth();
     if (!userId) {
@@ -39,7 +39,7 @@ export async function updateuser(data) { // this will be our server action and t
                         data: {
                             industry: data.industry,
                             salaryRanges: [],
-                            growthRates: 0,
+                            growthRate: 0,
                             demandLevel: 'Medium',
                             topSkills: [],
                             marketOutlook: 'Neutral',
@@ -72,8 +72,11 @@ export async function updateuser(data) { // this will be our server action and t
             }
 
         )
+        return { success: true,  ...result };
 
     } catch (error) {
+        console.error("Error updating user:", error.message);
+        throw new Error("Failed to update user");
 
     }
 }
