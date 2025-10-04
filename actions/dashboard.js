@@ -12,7 +12,7 @@ const model = genAI.getGenerativeModel({
 export  async function generateAIInsights(industry){
 
     const prompt = `
-          Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format without any additional notes or explanations:
+          Analyze the current state of the ${industry} industry and provide insights keeping near future job market in mind ONLY in the following JSON format without any additional notes or explanations:
           {
             "salaryRanges": [
               { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
