@@ -5,11 +5,12 @@ import { getIndustryInsights } from "@/actions/dashboard";
 const IndustryInsights =async () => {
   
     const { isOnboarded } = await getUserOnboardingStatus();
-  const insights =await getIndustryInsights();
   
     if(!isOnboarded){
       redirect('/onboarding')
     }
+
+  const insights =await getIndustryInsights();
   return (
     <div className="container mx-auto">
        <DashboardView insights={insights} />
