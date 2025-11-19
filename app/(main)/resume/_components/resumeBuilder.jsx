@@ -23,7 +23,8 @@ import useFetch from "@/hooks/useFetch";
 import { useUser } from "@clerk/nextjs";
 import { entriesToMarkdown } from "@/app/lib/helper";
 import { resumeSchema } from "@/app/lib/schema";
-import html2pdf from "html2pdf.js/dist/html2pdf.min.js";
+import { pdf } from "@react-pdf/renderer";
+import ResumePDF from "./resumePdf";
 
 export default function ResumeBuilder({ initialContent }) {
   const [activeTab, setActiveTab] = useState("edit");
@@ -112,25 +113,29 @@ export default function ResumeBuilder({ initialContent }) {
 
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generatePDF = async () => {
+const generatePDF = async () => {
+  try {
     setIsGenerating(true);
-    try {
-      const element = document.getElementById("resume-pdf");
-      const opt = {
-        margin: [15, 15],
-        filename: "resume.pdf",
-        image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
-      };
 
-      await html2pdf().set(opt).from(element).save();
-    } catch (error) {
-      console.error("PDF generation error:", error);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+    const blob = await pdf(
+      <ResumePDF data={formValues} name={user.fullName} />
+    ).toBlob();
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "resume.pdf";
+    link.click();
+    URL.revokeObjectURL(url);
+
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to generate PDF");
+  } finally {
+    setIsGenerating(false);
+  }
+};
+
 
   const onSubmit = async (data) => {
     try {
@@ -170,19 +175,20 @@ export default function ResumeBuilder({ initialContent }) {
               </>
             )}
           </Button>
-          <Button onClick={generatePDF} disabled={isGenerating}>
-            {isGenerating ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Generating PDF...
-              </>
-            ) : (
-              <>
-                <Download className="h-4 w-4" />
-                Download PDF
-              </>
-            )}
-          </Button>
+<Button onClick={generatePDF} disabled={isGenerating}>
+  {isGenerating ? (
+    <>
+      <Loader2 className="h-4 w-4 animate-spin" />
+      Generating PDF...
+    </>
+  ) : (
+    <>
+      <Download className="h-4 w-4" />
+      Download PDF
+    </>
+  )}
+</Button>
+
         </div>
       </div>
 
@@ -401,17 +407,7 @@ export default function ResumeBuilder({ initialContent }) {
               preview={resumeMode}
             />
           </div>
-          <div className="hidden">
-            <div id="resume-pdf">
-              <MDEditor.Markdown
-                source={previewContent}
-                style={{
-                  background: "white",
-                  color: "black",
-                }}
-              />
-            </div>
-          </div>
+          
         </TabsContent>
       </Tabs>
     </div>
