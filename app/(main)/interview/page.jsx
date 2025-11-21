@@ -12,6 +12,7 @@ const InterviewPage = async() => {
         <h1 className="text-6xl font-bold gradient-title">
           Interview Preparation
         </h1>
+        
       </div>
       <div className="space-y-6">
         <StatsCards assessments={assessments} />

@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { BarLoader } from "react-spinners";
+import { MultiStepLoader } from "@/components/ui/multi-step-loader";
 import { toast } from "sonner";
 import QuizResult from "./quizResults";
 const Quiz = () => {
@@ -92,7 +93,14 @@ const Quiz = () => {
   };
 
     if (generatingQuiz) {
-    return <BarLoader className="mt-4" width={"100%"} color="gray" />;
+    return <MultiStepLoader 
+      loadingStates={[
+        { text: "Analyzing your profile..." },
+        { text: "Generating questions..." },
+        { text: "Preparing quiz..." }
+      ]}
+      loading={true}
+    />;
   }
 
 

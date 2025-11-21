@@ -47,10 +47,16 @@ const Header = async() => {
                                 </Link>
 
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            {/* <DropdownMenuItem>
                                 <Link href={"/cover-letter"}>
                                    <PenBox className=' h-4 w-4' />
                                     <span className='hidden md:block'>Cover Letter</span>
+                                </Link>
+                            </DropdownMenuItem> */}
+                                                        <DropdownMenuItem>
+                                <Link href={"/interview/mock"}>
+                                    <GraduationCap className=' h-4 w-4' />
+                                    <span className='hidden md:block'>Mock Interview</span>
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
