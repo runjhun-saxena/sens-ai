@@ -76,14 +76,19 @@ export default function ResumePDF({ data, name }) {
         {/* CONTACTS */}
         <View style={styles.contactRow}>
           {data.contactInfo.email && (
-            <Text style={styles.contactItem}>📧 {data.contactInfo.email}</Text>
+            <Text style={styles.contactItem}>{data.contactInfo.email}</Text>
           )}
           {data.contactInfo.mobile && (
-            <Text style={styles.contactItem}>📱 {data.contactInfo.mobile}</Text>
+            <Text style={styles.contactItem}> {data.contactInfo.mobile}</Text>
           )}
           {data.contactInfo.linkedin && (
-            <Text style={styles.contactItem}>💼 {data.contactInfo.linkedin}</Text>
+            <Text style={styles.contactItem}> {data.contactInfo.linkedin}</Text>
           )}
+          {
+            data.contactInfo.twitter && (
+              <Text style={styles.contactItem}> {data.contactInfo.twitter}</Text>
+            )
+          }
         </View>
 
         {/* SUMMARY */}

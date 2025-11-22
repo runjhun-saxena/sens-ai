@@ -158,7 +158,7 @@ const generatePDF = async () => {
           Resume Builder
         </h1>
         <div className="space-x-2">
-          <Button
+          {/* <Button
             variant="destructive"
             onClick={handleSubmit(onSubmit)}
             disabled={isSaving}
@@ -174,7 +174,7 @@ const generatePDF = async () => {
                 Save
               </>
             )}
-          </Button>
+          </Button> */}
 <Button onClick={generatePDF} disabled={isGenerating}>
   {isGenerating ? (
     <>
@@ -195,7 +195,7 @@ const generatePDF = async () => {
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="edit">Form</TabsTrigger>
-          <TabsTrigger value="preview">Markdown</TabsTrigger>
+          {/* <TabsTrigger value="preview">Markdown</TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="edit">
