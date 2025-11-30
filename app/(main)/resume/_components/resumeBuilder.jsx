@@ -12,7 +12,6 @@ import {
   Save,
 } from "lucide-react";
 import { toast } from "sonner";
-import MDEditor from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,14 +22,18 @@ import useFetch from "@/hooks/useFetch";
 import { useUser } from "@clerk/nextjs";
 import { entriesToMarkdown } from "@/app/lib/helper";
 import { resumeSchema } from "@/app/lib/schema";
-import { pdf } from "@react-pdf/renderer";
-import ResumePDF from "./resumePdf";
+import dynamic from "next/dynamic";
+
+
 
 export default function ResumeBuilder({ initialContent }) {
   const [activeTab, setActiveTab] = useState("edit");
   const [previewContent, setPreviewContent] = useState(initialContent);
   const { user } = useUser();
   const [resumeMode, setResumeMode] = useState("preview");
+  const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+  
+
 
   const {
     control,
@@ -114,6 +117,10 @@ export default function ResumeBuilder({ initialContent }) {
   const [isGenerating, setIsGenerating] = useState(false);
 
 const generatePDF = async () => {
+  const pdf = (await import("@react-pdf/renderer")).pdf;
+  const ResumePDF = (await import("./resumePdf")).default;
+
+
   try {
     setIsGenerating(true);
 

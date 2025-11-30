@@ -17,11 +17,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import QuizResult from "./quizResults";
+
 
 export default function QuizList({ assessments }) {
   const router = useRouter();
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+  const QuizResult = dynamic(() => import("./quizResults"));
+
 
   return (
     <>
