@@ -2,10 +2,11 @@ import React from 'react'
 import { getAssessments } from '@/actions/interview';
 import QuizList from './_components/quizList';
 import StatsCards from './_components/statsCard';
-import PerformanceChart from './_components/performanceChart';
 const InterviewPage = async() => {
 
   const assessments = await getAssessments();
+  const PerformanceChart = dynamic(() => import('./_components/performanceChart'), { ssr: false });
+
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
