@@ -41,9 +41,9 @@ const Header = async() => {
                         <DropdownMenuContent>
 
                             <DropdownMenuItem>
-                                <Link href={"/resume"}>
+                                <Link href={"/resume"} className='flex items-center gap-2'>
                                                                 <FileText className=' h-4 w-4' />
-                                <span className='hidden md:block'> Build Resume </span>
+                                 Build Resume 
                                 </Link>
 
                             </DropdownMenuItem>
@@ -54,15 +54,15 @@ const Header = async() => {
                                 </Link>
                             </DropdownMenuItem> */}
                                                         <DropdownMenuItem>
-                                <Link href={"/interview/mock"}>
+                                <Link href={"/interview/mock"} className='flex items-center gap-2' >
                                     <GraduationCap className=' h-4 w-4' />
-                                    <span className='hidden md:block'>Mock Interview</span>
+                                    <span className=' md:block'>Mock Interview</span>
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <Link href={"/interview"}>
+                                <Link href={"/interview"} className='flex items-center gap-2'>
                                     <GraduationCap className=' h-4 w-4' />
-                                    <span className='hidden md:block'>Interview Prep</span>
+                                    Interview Prep
                                 </Link>
                             </DropdownMenuItem>
 

@@ -17,9 +17,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import Image from "next/image";
 import { features } from "@/data/features";
-import { testimonial } from "@/data/testimonials";
 import { faqs } from "@/data/faq";
 import { howItWorks } from "@/data/howItWorks";
 
