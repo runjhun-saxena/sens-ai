@@ -9,7 +9,6 @@ import {
   Edit,
   Loader2,
   Monitor,
-  Save,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
