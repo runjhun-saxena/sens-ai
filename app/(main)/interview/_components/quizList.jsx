@@ -17,6 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import dynamic from "next/dynamic";
 
 
 export default function QuizList({ assessments }) {
