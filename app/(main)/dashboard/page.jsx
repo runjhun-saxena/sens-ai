@@ -2,13 +2,10 @@ import { redirect } from "next/navigation";
 import { getUserOnboardingStatus } from "@/actions/user";
 import DashboardView from "./_components/dashboardView";
 import { getIndustryInsights } from "@/actions/dashboard";
+import { requireOnboarding } from "@/lib/requireOnboarding";
 const IndustryInsights =async () => {
   
-    const { isOnboarded } = await getUserOnboardingStatus();
-  
-    if(!isOnboarded){
-      redirect('/onboarding')
-    }
+  await requireOnboarding();
 
   const insights =await getIndustryInsights();
   return (

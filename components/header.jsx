@@ -12,9 +12,15 @@ const Header = async() => {
     return (
         <header className='bg-background/80 fixed top-0 w-full z-50 backdrop-blur-md supports-[backdrop-filter:blur]:bg-background/60 '>
 
-            <nav className='container mx-auto p-4 h-16 flex items-center justify-between '>
-                <Link href="/">
-                    <Image src="/logo.png" alt="Logo" width={200} height={60} />
+<nav className='container mx-auto p-4 h-14 md:h-16 flex items-center justify-between'>
+                <Link href="/" >
+<Image
+  src="/logo.png"
+  alt="Logo"
+  width={200}
+  height={60}
+  className="w-28 sm:w-36 md:w-44 lg:w-52 h-auto"
+/>
 
                 </Link>
 
@@ -72,7 +78,7 @@ const Header = async() => {
 
             <SignedOut>
                 <SignInButton>
-                    <Button variant="outline" className='hidden md:block'>Sign In</Button>
+                    <Button variant="outline" className=' md:block'>Sign In</Button>
                 </SignInButton>
             </SignedOut>
 
