@@ -1,35 +1,31 @@
-import { NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
-const protectedRoutes = [
-  "/dashboard",
-  "/resume",
-  "/ai-cover-letter",
-  "/interview",
-];
+const isProtectedRoute = createRouteMatcher([
+  "/dashboard(.*)",
+  "/resume(.*)",
+  "/cover-letter(.*)",
+  "/interview(.*)",
+  "/onboarding(.*)",
+])
 
-export function middleware(req) {
-  const pathname = req.nextUrl.pathname;
+export default clerkMiddleware(async(auth,req)=>{
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
+  const {userId}= await auth();
 
-  if (isProtectedRoute) {
-    // Better Auth uses "better-auth.session_token" as the cookie name
-    const sessionCookie = req.cookies.get("better-auth.session_token");
-
-    if (!sessionCookie) {
-      return NextResponse.redirect(
-        new URL(`/sign-in?returnUrl=${encodeURIComponent(req.url)}`, req.url)
-      );
-    }
+  if (!userId && isProtectedRoute(req))
+  {
+    const { redirectToSignIn} =await auth();
+    return redirectToSignIn();
   }
-
-  return NextResponse.next();
-}
+  return NextResponse.next()
+});
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|api/auth).*)",
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
   ],
 };

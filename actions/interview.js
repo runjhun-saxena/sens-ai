@@ -1,24 +1,18 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { headers } from "next/headers";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
-async function getCurrentUserId() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  return session?.user?.id;
-}
-
 export async function generateQuiz() {
-  const userId = await getCurrentUserId();
+  const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: { id: userId },
+    where: { clerkUserId: userId },
     select: {
       industry: true,
       skills: true,
@@ -64,11 +58,11 @@ export async function generateQuiz() {
 }
 
 export async function saveQuizResult(questions, answers, score) {
-  const userId = await getCurrentUserId();
+  const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: { id: userId },
+    where: { clerkUserId: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -135,11 +129,11 @@ export async function saveQuizResult(questions, answers, score) {
 }
 
 export async function getAssessments() {
-  const userId = await getCurrentUserId();
+  const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: { id: userId },
+    where: { clerkUserId: userId },
   });
 
   if (!user) throw new Error("User not found");

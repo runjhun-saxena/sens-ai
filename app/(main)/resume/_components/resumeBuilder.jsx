@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { saveResume } from "@/actions/resume";
 import { EntryForm } from "./entryForm";
 import useFetch from "@/hooks/useFetch";
-import { authClient } from "@/lib/auth-client";
+import { useUser } from "@clerk/nextjs";
 import { entriesToMarkdown } from "@/app/lib/helper";
 import { resumeSchema } from "@/app/lib/schema";
 import dynamic from "next/dynamic";
@@ -28,17 +28,11 @@ import dynamic from "next/dynamic";
 export default function ResumeBuilder({ initialContent }) {
   const [activeTab, setActiveTab] = useState("edit");
   const [previewContent, setPreviewContent] = useState(initialContent);
-  const [user, setUser] = useState(null);
+  const { user } = useUser();
   const [resumeMode, setResumeMode] = useState("preview");
   const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
   
-  useEffect(() => {
-    const fetchSession = async () => {
-      const session = await authClient.getSession();
-      setUser(session?.user);
-    };
-    fetchSession();
-  }, []);
+
 
   const {
     control,
@@ -100,7 +94,7 @@ export default function ResumeBuilder({ initialContent }) {
     if (contactInfo.twitter) parts.push(`🐦 [Twitter](${contactInfo.twitter})`);
 
     return parts.length > 0
-      ? `## <div align="center">${user?.name || 'Your Name'}</div>
+      ? `## <div align="center">${user.fullName}</div>
         \n\n<div align="center">\n\n${parts.join(" | ")}\n\n</div>`
       : "";
   };
@@ -130,7 +124,7 @@ const generatePDF = async () => {
     setIsGenerating(true);
 
     const blob = await pdf(
-      <ResumePDF data={formValues} name={user?.name || 'Your Name'} />
+      <ResumePDF data={formValues} name={user.fullName} />
     ).toBlob();
 
     const url = URL.createObjectURL(blob);

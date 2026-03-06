@@ -1,21 +1,16 @@
 "use server";
 
 import { db } from "@/lib/prisma";
-import { auth } from "@/lib/auth";
+import { auth } from "@clerk/nextjs/server";
 import { generateAIInsights } from "./dashboard";
-import { headers } from "next/headers";
 
-async function getCurrentUserId() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  return session?.user?.id;
-}
 
 export async function updateUser(data) {
-  const userId = await getCurrentUserId();
+  const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: { id: userId },
+    where: { clerkUserId: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -35,7 +30,7 @@ export async function updateUser(data) {
         if (!industryInsight) {
           const insights = await generateAIInsights(data.industry);
 
-         industryInsight = await tx.industryInsight.create({
+          industryInsight = await db.industryInsight.create({
             data: {
               industry: data.industry,
               ...insights,
@@ -45,18 +40,17 @@ export async function updateUser(data) {
         }
 
         // Now update the user
-const updatedUser = await tx.user.update({
-  where: {
-    id: user.id,
-  },
-  data: {
-    industry: data.industry,
-    experience: data.experience,
-    bio: data.bio,
-    skills: data.skills,
-    isOnboarded: true, // 🔥 ADD THIS
-  },
-});
+        const updatedUser = await tx.user.update({
+          where: {
+            id: user.id,
+          },
+          data: {
+            industry: data.industry,
+            experience: data.experience,
+            bio: data.bio,
+            skills: data.skills,
+          },
+        });
 
         return { updatedUser, industryInsight };
       },
@@ -75,17 +69,36 @@ const updatedUser = await tx.user.update({
 }
 
 export async function getUserOnboardingStatus() {
-  const userId = await getCurrentUserId();
-  if (!userId) throw new Error("Unauthorized");
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
 
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    select: { isOnboarded: true },
-  });
+    const user = await db.user.findUnique(
+        {
+            where: {
+                clerkUserId: userId,
+            }
+        }
+    )
 
-  if (!user) throw new Error("User not found");
-
-  return {
-    isOnboarded: user.isOnboarded,
-  };
+    if (!user) {
+        throw new Error("User not found");
+    }
+    try {
+        const user = await db.user.findUnique({
+            where: {
+                clerkUserId: userId,
+            },
+            select: {
+                industry: true,
+            },
+        });
+        return {
+            isOnboarded: !!user?.industry,
+        };
+    } catch (error) {
+        console.error("Error checking onboarding status:", error);
+        throw new Error("Failed to check onboarding status");
+    }
 }

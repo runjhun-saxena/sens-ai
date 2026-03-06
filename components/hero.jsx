@@ -3,8 +3,6 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-
 const HeroSection = () => {
 
      const imageRef = useRef(null);
@@ -49,7 +47,7 @@ const HeroSection = () => {
 
         </div>
 
-         {/* <div className="hero-image-wrapper mt-5 md:mt-0 md:block hidden">
+         <div className="hero-image-wrapper mt-5 md:mt-0 md:block hidden">
             <div ref={imageRef}>
                 <Image
                     src={"/banner.png"}
@@ -60,7 +58,7 @@ const HeroSection = () => {
               priority
                 />
             </div>
-        </div> */}
+        </div>
     </div>
 </section>
   )
