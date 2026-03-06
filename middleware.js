@@ -1,19 +1,35 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher([
-  "/dashboard(.*)",
-  "/resume(.*)",
-  "/cover-letter(.*)",
-  "/interview(.*)",
-]);
+const protectedRoutes = [
+  "/dashboard",
+  "/resume",
+  "/ai-cover-letter",
+  "/interview",
+];
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId, redirectToSignIn } = await auth();
+export function middleware(req) {
+  const pathname = req.nextUrl.pathname;
 
-  if (!userId && isProtectedRoute(req)) {
-    return redirectToSignIn({ returnBackUrl: req.url });
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+
+  if (isProtectedRoute) {
+    // Better Auth uses "better-auth.session_token" as the cookie name
+    const sessionCookie = req.cookies.get("better-auth.session_token");
+
+    if (!sessionCookie) {
+      return NextResponse.redirect(
+        new URL(`/sign-in?returnUrl=${encodeURIComponent(req.url)}`, req.url)
+      );
+    }
   }
 
   return NextResponse.next();
-});
+}
+
+export const config = {
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|api/auth).*)",
+  ],
+};

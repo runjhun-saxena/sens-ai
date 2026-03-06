@@ -1,22 +1,29 @@
 "use server";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { headers } from "next/headers";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+async function getCurrentUserId() {
+  const session = await auth.api.getSession({ headers: await headers() });
+  return session?.user?.id;
+}
+
 export async function saveResume(){
-const {userId}= await auth();
+const userId = await getCurrentUserId();
 if(!userId) throw new Error("Unauthorized");
 
 const user = await db.user.findUnique({
     where: {
-        clerkUserId: userId,
+        id: userId,
     },
 });
 
-if (!user) throw new Error (" USer Not Found");
+if (!user) throw new Error (" User Not Found");
 
 try {
     const resume = await db.resume.upsert({ // upsert : update if exists else create
@@ -44,11 +51,11 @@ try {
 }
 
 export async function getResume() {
-  const { userId } = await auth();
+  const userId = await getCurrentUserId();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { id: userId },
   });
 
   if (!user) throw new Error("User not found");
@@ -61,11 +68,11 @@ export async function getResume() {
 }
 
 export async function improveWithAI({ current, type }) {
-  const { userId } = await auth();
+  const userId = await getCurrentUserId();
   if (!userId) throw new Error("Unauthorized");
 
   const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
+    where: { id: userId },
     include: {
       industryInsight: true,
     },

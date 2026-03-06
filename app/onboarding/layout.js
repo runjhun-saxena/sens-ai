@@ -1,9 +1,12 @@
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
 
 export default async function RootLayout({ children }) {
-  if ((await auth()).sessionClaims?.metadata.onboardingComplete === true) {
-    redirect('/')
+  const session = await auth.api.getSession({ headers: await headers() })
+  
+  if (!session?.user) {
+    redirect('/sign-in')
   }
 
   return <>{children}</>

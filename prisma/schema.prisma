@@ -8,26 +8,66 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  clerkUserId   String    @unique // clerk user id
-  email         String    @unique
+  id            String    @id @default(cuid())
   name          String?
-  imageUrl      String?
-  industry      String?    // Combined industry-subindustry (e.g., "tech-software-development")
-  industryInsight IndustryInsight? @relation(fields: [industry], references: [industry])
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-    isOnboarded   Boolean   @default(false)
 
-  // Profile fields
+  // App-specific fields
+  industry      String?    // Combined industry-subindustry (e.g., "tech-software-development")
+  industryInsight IndustryInsight? @relation(fields: [industry], references: [industry])
+  isOnboarded   Boolean   @default(false)
   bio           String?
   experience    Int?      // Years of experience
-  
-  // Relations
   skills        String[]  // Array of skills
+
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
   assessments   Assessment[]
   resume        Resume?
   coverLetter   CoverLetter[]
+}
+model Account {
+  id         String   @id
+  accountId  String
+  providerId String
+  userId     String
+  password   String?
+  createdAt  DateTime
+  updatedAt  DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Session {
+  id        String   @id
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+
+  createdAt DateTime
+  updatedAt DateTime
+
+  @@index([userId])
+}
+
+model Verification {
+  id        String   @id
+  identifier String
+  value     String
+  expiresAt DateTime
+  createdAt DateTime
+  updatedAt DateTime
 }
 
 model Assessment {
