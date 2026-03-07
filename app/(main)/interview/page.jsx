@@ -2,9 +2,12 @@ import React from 'react'
 import { getAssessments } from '@/actions/interview';
 import QuizList from './_components/quizList';
 import StatsCards from './_components/statsCard';
+import { requireOnboarding } from "@/lib/requireOnboarding";
 
 import PerformanceChart from './_components/performanceChart';
 const InterviewPage = async() => {
+    await requireOnboarding();
+
 
   const assessments = await getAssessments();
  

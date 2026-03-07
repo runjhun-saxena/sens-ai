@@ -1,6 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/lib/auth";
 import { db } from "@/lib/prisma";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { headers } from "next/headers";
 
 
 const genAI =  new GoogleGenerativeAI(process.env.GEMINI_API_KEY); // instance of genAI class 
@@ -38,15 +39,17 @@ export  async function generateAIInsights(industry){
 
 }
 export async function getIndustryInsights (){
-     const { userId } = await auth();
-        if (!userId) {
+     const session = await auth.api.getSession({ headers: await headers() });
+     const userId = session?.user?.id;
+     
+     if (!userId) {
             throw new Error("Unauthorized");
         }
     
         const user = await db.user.findUnique(
             {
                 where: {
-                    clerkUserId: userId,
+                    id: userId,
                 },
                 include : { industryInsight : true },
             }

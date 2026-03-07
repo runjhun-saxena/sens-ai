@@ -1,8 +1,10 @@
 import { getResume } from "@/actions/resume"
 import ResumeBuilder from "./_components/resumeBuilder";
+import { requireOnboarding } from "@/lib/requireOnboarding";
 
 const ResumePage = async() => {
   const resume = await getResume();
+  await requireOnboarding();
 
   return (
     <div className="container mx-auto py-6">
