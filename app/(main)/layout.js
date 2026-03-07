@@ -1,7 +1,10 @@
-import React from "react";
+import Header from "@/components/header";
 
-const MainLayout = async ({ children }) => {
-  return <div className="container mx-auto mt-24 mb-20">{children}</div>;
-};
-
-export default MainLayout;
+export default function MainLayout({ children }) {
+  return (
+    <>
+      <Header />
+      <main className="min-h-screen pt-25">{children}</main>
+    </>
+  );
+}
