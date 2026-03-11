@@ -3,26 +3,24 @@ import { generateQuiz , saveQuizResult } from "@/actions/interview";
 import useFetch from "@/hooks/useFetch";
 import {
   Card,
-  CardAction,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { BarLoader } from "react-spinners";
 import { MultiStepLoader } from "@/components/ui/multi-step-loader";
 import { toast } from "sonner";
 import QuizResult from "./quizResults";
+
 const Quiz = () => {
-    const [currentQuestion, setCurrentQuestion] = useState(0);
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState([]);
-  const [showExplanation, setShowExplanation] = useState(false);
 
   const {
     loading: generatingQuiz,
@@ -30,16 +28,14 @@ const Quiz = () => {
     data: quizData,
   } = useFetch(generateQuiz);
 
-    const {
+  const {
     loading: savingResult,
     fn: saveQuizResultFn,
     data: resultData,
     setData: setResultData,
   } = useFetch(saveQuizResult);
 
-  console.log(resultData)
-
-    useEffect(() => {
+  useEffect(() => {
     if (quizData) {
       setAnswers(new Array(quizData.length).fill(null));
     }
@@ -49,20 +45,18 @@ const Quiz = () => {
     const newAnswers = [...answers];
     newAnswers[currentQuestion] = answer;
     setAnswers(newAnswers);
-
   }
 
   const handleNext = ()=> {
     if (currentQuestion < quizData.length - 1 )
     {
         setCurrentQuestion(currentQuestion +1);
-        setShowExplanation(false);
     }
     else {
         finishQuiz();
-
     }
   }
+
   const calculateScore = () => {
     let correct = 0;
     answers.forEach((answer, index) => {
@@ -83,36 +77,35 @@ const Quiz = () => {
     }
   };
 
-
-    const startNewQuiz = () => {
+  const startNewQuiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
-    setShowExplanation(false);
     generateQuizFn();
     setResultData(null);
   };
 
-    if (generatingQuiz) {
-    return <MultiStepLoader 
-      loadingStates={[
-        { text: "Analyzing your profile..." },
-        { text: "Generating questions..." },
-        { text: "Preparing quiz..." }
-      ]}
-      loading={true}
-    />;
+  if (generatingQuiz) {
+    return (
+      <MultiStepLoader 
+        loadingStates={[
+          { text: "Analyzing your profile..." },
+          { text: "Generating questions..." },
+          { text: "Preparing quiz..." }
+        ]}
+        loading={true}
+      />
+    );
   }
 
-
-    if (resultData) {
+  if (resultData) {
     return (
       <div className="mx-2">
-      <QuizResult result={resultData} onStartNew={startNewQuiz} />
+        <QuizResult result={resultData} onStartNew={startNewQuiz} />
       </div>
     );
   }
 
-if (!quizData) {
+  if (!quizData) {
     return (
       <Card className="mx-2">
         <CardHeader>
@@ -133,73 +126,61 @@ if (!quizData) {
     );
   }
 
-    const question = quizData[currentQuestion];
-  
+  const question = quizData[currentQuestion];
+
   return (
-      <Card className="mx-2">
-        <CardHeader>
-          <CardTitle>Question {currentQuestion + 1} of {quizData.length}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-lg font-medium">
-{question.question}
-          </p>
-          <RadioGroup defaultValue="space-y-2"
+    <Card className="mx-2">
+
+      <CardHeader>
+        <CardTitle>
+          Question {currentQuestion + 1} of {quizData.length}
+        </CardTitle>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+
+        <p className="text-lg font-medium">
+          {question.question}
+        </p>
+
+        <RadioGroup
           onValueChange={handleAnswer}
           value={answers[currentQuestion]}
-          >
-
+          className="space-y-2"
+        >
           {question.options.map((option, index) => (
             <div key={index} className="flex items-center space-x-2">
               <RadioGroupItem value={option} id={`option-${index}`} />
               <Label htmlFor={`option-${index}`}>{option}</Label>
             </div>
           ))}
-</RadioGroup>
+        </RadioGroup>
 
-        {showExplanation && (
-          <div className="mt-4 p-4 bg-muted rounded-lg">
-            <p className="font-medium">Explanation:</p>
-            <p className="text-muted-foreground">{question.explanation}</p>
-          </div>
-        )}
-        </CardContent>
-        <CardFooter>
-            {!showExplanation && (
-                <Button
-                onClick= {()=>{
-                    setShowExplanation(true);
-                }}
-                variant='outline'
-                disabled={!answers[currentQuestion]}
-                >
-                    Show Explanation :
+      </CardContent>
 
-                </Button>
-            )}
+      <CardFooter>
 
-                        {!showExplanation && (
-                <Button
-                onClick= {handleNext}
-                className="ml-auto"
-                disabled={!answers[currentQuestion] || savingResult}
-                >
-                    {
-                        savingResult && (
-                          <BarLoader className="mt-4" width={"100%"} color="gray" />
-                        )
-                    }
+        <Button
+          onClick={handleNext}
+          className="ml-auto"
+          disabled={!answers[currentQuestion] || savingResult}
+        >
 
-                  {
-                    currentQuestion < quizData.length - 1 
-                    ? 'Next Question':'Finish Quiz'
-                  }
+          {savingResult && (
+            <BarLoader width={"100%"} color="gray" />
+          )}
 
-                </Button>
-            )}
+          {
+            currentQuestion < quizData.length - 1 
+            ? 'Next Question'
+            : 'Finish Quiz'
+          }
 
-        </CardFooter>
-      </Card>
+        </Button>
+
+      </CardFooter>
+
+    </Card>
   )
 }
 
