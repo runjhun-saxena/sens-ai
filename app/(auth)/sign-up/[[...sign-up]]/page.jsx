@@ -148,7 +148,7 @@ export default function SignUpPage() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-11 bg-blue-400 hover:bg-blue-300 text-zinc-900 font-semibold shadow-lg shadow-blue-400/20 hover:shadow-blue-400/30 rounded-lg group mt-2"
+            className="w-full h-11 bg-white hover:bg-white/90 text-zinc-900 font-semibold shadow-lg shadow-blue-400/20 hover:shadow-blue-400/30 rounded-lg group mt-2"
           >
             {isLoading ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -169,7 +169,7 @@ export default function SignUpPage() {
         </div>
 
         {/* Google */}
-        <Button
+        {/* <Button
           variant="outline"
           className="w-full h-11 border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-zinc-200"
           onClick={handleGoogleSignUp}
@@ -178,7 +178,7 @@ export default function SignUpPage() {
         >
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Continue with Google
-        </Button>
+        </Button> */}
 
         {/* Sign in link */}
         <p className="text-center text-zinc-500 text-sm mt-6">

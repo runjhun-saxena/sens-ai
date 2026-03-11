@@ -133,11 +133,11 @@ export default function SignInPage() {
           </Button> */}
 
           {/* Divider */}
-          <div className="relative flex items-center gap-3 mb-6">
+          {/* <div className="relative flex items-center gap-3 mb-6">
             <div className="flex-1 h-px bg-zinc-800" />
             <span className="text-zinc-600 text-xs font-medium tracking-wider uppercase">or</span>
             <div className="flex-1 h-px bg-zinc-800" />
-          </div>
+          </div> */}
 
           {/* Form */}
           <form onSubmit={handleSignIn} className="space-y-4">
@@ -162,12 +162,12 @@ export default function SignInPage() {
                 <Label htmlFor="password" className="text-zinc-300 text-sm font-medium">
                   Password
                 </Label>
-                <Link
+                {/* <Link
                   href="/forgot-password"
                   className="text-xs text-blue-400/80 hover:text-blue-400 transition-colors duration-150 font-medium"
                 >
                   Forgot password?
-                </Link>
+                </Link> */}
               </div>
               <div className="relative">
                 <Input
@@ -219,7 +219,7 @@ export default function SignInPage() {
           </p>
 
           {/* Legal */}
-          <p className="text-center text-zinc-600 text-xs mt-8 leading-relaxed">
+          {/* <p className="text-center text-zinc-600 text-xs mt-8 leading-relaxed">
             By signing in, you agree to our{' '}
             <Link href="/terms" className="underline underline-offset-2 hover:text-zinc-400 transition-colors">
               Terms
@@ -229,7 +229,7 @@ export default function SignInPage() {
               Privacy Policy
             </Link>
             .
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
