@@ -51,13 +51,13 @@ const Header = async () => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
 
-                                    <DropdownMenuItem>
+                                    {/* <DropdownMenuItem>
                                         <Link href={"/resume"} className='flex items-center gap-2'>
                                             <FileText className=' h-4 w-4' />
                                             Build Resume
                                         </Link>
 
-                                    </DropdownMenuItem>
+                                    </DropdownMenuItem> */}
                                     {/* <DropdownMenuItem>
                                 <Link href={"/cover-letter"}>
                                    <PenBox className=' h-4 w-4' />
