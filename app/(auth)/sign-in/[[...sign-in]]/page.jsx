@@ -49,55 +49,10 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="h-screen w-full flex bg-zinc-950">
+    <div className="h-screen w-full flex items-center justify-center bg-zinc-950">
 
-      {/* ── Left panel: branding ── */}
-      <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 relative overflow-hidden flex-col justify-between p-12">
-
-        {/* Layered background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_rgba(251,191,36,0.08)_0%,_transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(251,191,36,0.05)_0%,_transparent_55%)]" />
-
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(251,191,36,1) 1px, transparent 1px), linear-gradient(90deg, rgba(251,191,36,1) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
-
-        {/* Decorative orbs */}
-        <div className="absolute top-1/4 left-1/3 w-72 h-72 rounded-full bg-blue-400/5 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-blue-500/4 blur-3xl" />
-
-        {/* Hero copy */}
-        <div className="relative z-10 space-y-6 max-w-md">
-
-
-          <h1 className="text-4xl xl:text-5xl font-bold text-white leading-[1.15] tracking-tight">
-            The smartest way
-            <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-blue-500">
-              to get things done.
-            </span>
-          </h1>
-
-          <p className="text-zinc-400 text-base leading-relaxed">
-            Advance your career with personalized guidance, interview prep, and
-            AI-powered tools for job success.
-          </p>
-
-        </div>
-
-        {/* Testimonial */}
-
-      </div>
-
-      {/* ── Right panel: form ── */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 lg:p-12 relative">
+      {/* ── Form container ── */}
+      <div className="w-full flex items-center justify-center p-6 sm:p-10 lg:p-12 relative">
 
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(251,191,36,0.04)_0%,_transparent_65%)] pointer-events-none" />
 
@@ -218,18 +173,7 @@ export default function SignInPage() {
             </Link>
           </p>
 
-          {/* Legal */}
-          {/* <p className="text-center text-zinc-600 text-xs mt-8 leading-relaxed">
-            By signing in, you agree to our{' '}
-            <Link href="/terms" className="underline underline-offset-2 hover:text-zinc-400 transition-colors">
-              Terms
-            </Link>{' '}
-            and{' '}
-            <Link href="/privacy" className="underline underline-offset-2 hover:text-zinc-400 transition-colors">
-              Privacy Policy
-            </Link>
-            .
-          </p> */}
+
         </div>
       </div>
     </div>
